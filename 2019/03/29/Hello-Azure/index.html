@@ -6,18 +6,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="description" content="Welcome to Azure! This is the cloud service provided by Microsoft. Check documentation for more info. Quick StartCreate a new accountCreate a email username based account for access azure service.  Ru">
+    <meta name="description" content="In February of 2010, Azure Platform is available for commercial use. Later 3 years than Amazon Web Service. Initially it pay more focus on big company customer from Windows Server user. And then it gr">
 <meta name="keywords" content="cloud">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hello Azure">
 <meta property="og:url" content="https://adingx.github.io/2019/03/29/Hello-Azure/index.html">
 <meta property="og:site_name" content="adingx&#39;s note">
-<meta property="og:description" content="Welcome to Azure! This is the cloud service provided by Microsoft. Check documentation for more info. Quick StartCreate a new accountCreate a email username based account for access azure service.  Ru">
+<meta property="og:description" content="In February of 2010, Azure Platform is available for commercial use. Later 3 years than Amazon Web Service. Initially it pay more focus on big company customer from Windows Server user. And then it gr">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-05-09T03:03:15.279Z">
+<meta property="og:image" content="https://adingx.github.io/images/IaaS-FaaS.png">
+<meta property="og:image" content="https://adingx.github.io/images/network-resource.png">
+<meta property="og:image" content="https://adingx.github.io/images/azure-storage.png">
+<meta property="og:image" content="https://adingx.github.io/images/azure-IoT.png">
+<meta property="og:updated_time" content="2019-07-24T11:17:47.785Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hello Azure">
-<meta name="twitter:description" content="Welcome to Azure! This is the cloud service provided by Microsoft. Check documentation for more info. Quick StartCreate a new accountCreate a email username based account for access azure service.  Ru">
+<meta name="twitter:description" content="In February of 2010, Azure Platform is available for commercial use. Later 3 years than Amazon Web Service. Initially it pay more focus on big company customer from Windows Server user. And then it gr">
+<meta name="twitter:image" content="https://adingx.github.io/images/IaaS-FaaS.png">
     
     
         
@@ -99,7 +104,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick-Start"><span class="toc-number">1.</span> <span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-a-new-account"><span class="toc-number">1.1.</span> <span class="toc-text">Create a new account</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run-service"><span class="toc-number">1.2.</span> <span class="toc-text">Run service</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Connect-database"><span class="toc-number">1.3.</span> <span class="toc-text">Connect database</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy-to-remote-sites"><span class="toc-number">1.4.</span> <span class="toc-text">Deploy to remote sites</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Service-Architecture"><span class="toc-number">2.</span> <span class="toc-text">Service Architecture</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Summary"><span class="toc-number">3.</span> <span class="toc-text">Summary</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick-Start"><span class="toc-number">1.</span> <span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-number">1.1.</span> <span class="toc-text">fig-1: IaaS,FaaS,SaaS,PaaS</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Azure-Virtual-Machine"><span class="toc-number">2.</span> <span class="toc-text">Azure Virtual Machine</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-number">2.1.</span> <span class="toc-text">fig-2: network/compute resource group</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Azure-Functions"><span class="toc-number">3.</span> <span class="toc-text">Azure Functions</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Nodejs-environment"><span class="toc-number">3.0.1.</span> <span class="toc-text">Nodejs environment</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Verify-your-application"><span class="toc-number">3.0.2.</span> <span class="toc-text">Verify your application</span></a></li></ol></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#Service-Architecture"><span class="toc-number">4.</span> <span class="toc-text">Service Architecture</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-number">4.1.</span> <span class="toc-text">fig-3: Azure storage </span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-number">4.2.</span> <span class="toc-text">fig-4: Azure IoTs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reference"><span class="toc-number">5.</span> <span class="toc-text">Reference</span></a></li>
     </div>
   </span>
 </div>
@@ -143,13 +148,42 @@
   
 
   <div class="content" itemprop="articleBody">
-    <p>Welcome to <a href="https://azure.microsoft.com/" target="_blank" rel="noopener">Azure</a>! This is the cloud service provided by Microsoft. Check <a href="https://docs.microsoft.com/en-us/azure/" target="_blank" rel="noopener">documentation</a> for more info.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-account"><a href="#Create-a-new-account" class="headerlink" title="Create a new account"></a>Create a new account</h3><p>Create a email username based account for access azure service. </p>
-<h3 id="Run-service"><a href="#Run-service" class="headerlink" title="Run service"></a>Run service</h3><p>First create a VM ( virtual machina ).</p>
-<h3 id="Connect-database"><a href="#Connect-database" class="headerlink" title="Connect database"></a>Connect database</h3><p>Azure provide a rich data cache options. Certainly user own deploy database on VM is more flexible solution.</p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><p>Domain controls</p>
-<h2 id="Service-Architecture"><a href="#Service-Architecture" class="headerlink" title="Service Architecture"></a>Service Architecture</h2><p>fig-1</p>
-<h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h2><p>…</p>
+    <p>In February of 2010, Azure Platform is available for commercial use. Later 3 years than Amazon Web Service. Initially it pay more focus on big company customer from Windows Server user. And then it gradually open to all users. Until 2018, AWS remains the global market share leader in public cloud services at 33% followed by Azure at 13% and Google Cloud at 6%, from Synergy Research Group Report. Yet I prefer to Azure for friendly and amiable UEX.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><p>At first, open <a href="https://portal.azure.com/#home" target="_blank" rel="noopener">azure-console</a> to register your azure account and a credit card binding is required. After sign in, so many items and options are boomed to your screen. From my beginning, start with Azure VM(IaaS) or Azure Function(FaaS) is good choice.</p>
+<p><img align="center" src="/images/IaaS-FaaS.png"></p>
+<h3 style="text-align: center;">fig-1: IaaS,FaaS,SaaS,PaaS</h3>
+
+<p>FaaS is similar to PaaS.<br>The main difference that FaaS is unified event-driven API to support all programming language, and PaaS is depended on Middleware interface. </p>
+<h2 id="Azure-Virtual-Machine"><a href="#Azure-Virtual-Machine" class="headerlink" title="Azure Virtual Machine"></a>Azure Virtual Machine</h2><p>Create a Virtual Machine in azure-portal, selecting CPU/Memory/HD Storage similar to setup a VM on desktop.<br>OS setup is so easy on Azure Cloud, ubuntu or debian.<br>Pay attention to user auth for the way how to ssh connect your VM on Azure cloud, user password or certificates. </p>
+<ul>
+<li>Create a Virtual Machine </li>
+<li>Select the auth strategy </li>
+<li>Networking setting </li>
+<li>SSH connect and deploy your code</li>
+<li>Verify your application</li>
+</ul>
+<p><img align="center" src="/images/network-resource.png"></p>
+<h3 style="text-align: center;">fig-2: network/compute resource group</h3>
+
+
+<h2 id="Azure-Functions"><a href="#Azure-Functions" class="headerlink" title="Azure Functions"></a>Azure Functions</h2><h4 id="Nodejs-environment"><a href="#Nodejs-environment" class="headerlink" title="Nodejs environment"></a>Nodejs environment</h4><ul>
+<li>serverless package setup<br><code>npm install -g serverless</code><br><code>serverless config credentials --provider azure --key &lt;your_access_key_id&gt; --secret &lt;your_access_key_secret&gt;</code></li>
+<li>create a new appcation<br><code>serverless create --template hello-world</code></li>
+<li>event-driven </li>
+<li>auto-scaling </li>
+</ul>
+<h4 id="Verify-your-application"><a href="#Verify-your-application" class="headerlink" title="Verify your application"></a>Verify your application</h4><ul>
+<li>depoly<br><code>serverless deploy</code></li>
+<li>check Endpoints information from the output after running deploy action. Open the Endpoints in your browser.</li>
+</ul>
+<h2 id="Service-Architecture"><a href="#Service-Architecture" class="headerlink" title="Service Architecture"></a>Service Architecture</h2><p><img align="center" src="/images/azure-storage.png"></p>
+<h3 style="text-align: center;">fig-3: Azure storage </h3>
+
+<p><img align="center" src="/images/azure-IoT.png"></p>
+<h3 style="text-align: center;">fig-4: Azure IoTs</h3>
+
+
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p><a href="https://en.wikipedia.org/wiki/Microsoft_Azure" target="_blank" rel="noopener">azure-wiki</a><br><a href="https://docs.microsoft.com/en-us/azure/" target="_blank" rel="noopener">azure-documentation</a><br><a href="https://www.dezyre.com/article/aws-vs-azure-who-is-the-big-winner-in-the-cloud-war/401" target="_blank" rel="noopener">aws-vs-azure</a></p>
 
   </div>
 </article>
@@ -175,7 +209,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick-Start"><span class="toc-number">1.</span> <span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-a-new-account"><span class="toc-number">1.1.</span> <span class="toc-text">Create a new account</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run-service"><span class="toc-number">1.2.</span> <span class="toc-text">Run service</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Connect-database"><span class="toc-number">1.3.</span> <span class="toc-text">Connect database</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy-to-remote-sites"><span class="toc-number">1.4.</span> <span class="toc-text">Deploy to remote sites</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Service-Architecture"><span class="toc-number">2.</span> <span class="toc-text">Service Architecture</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Summary"><span class="toc-number">3.</span> <span class="toc-text">Summary</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick-Start"><span class="toc-number">1.</span> <span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-number">1.1.</span> <span class="toc-text">fig-1: IaaS,FaaS,SaaS,PaaS</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Azure-Virtual-Machine"><span class="toc-number">2.</span> <span class="toc-text">Azure Virtual Machine</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-number">2.1.</span> <span class="toc-text">fig-2: network/compute resource group</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Azure-Functions"><span class="toc-number">3.</span> <span class="toc-text">Azure Functions</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Nodejs-environment"><span class="toc-number">3.0.1.</span> <span class="toc-text">Nodejs environment</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Verify-your-application"><span class="toc-number">3.0.2.</span> <span class="toc-text">Verify your application</span></a></li></ol></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#Service-Architecture"><span class="toc-number">4.</span> <span class="toc-text">Service Architecture</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-number">4.1.</span> <span class="toc-text">fig-3: Azure storage </span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-number">4.2.</span> <span class="toc-text">fig-4: Azure IoTs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reference"><span class="toc-number">5.</span> <span class="toc-text">Reference</span></a></li>
     </div>
 
     <div id="share-footer" style="display: none">
