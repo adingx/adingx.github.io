@@ -1,0 +1,44 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Hisense Odin Browser WebView</title>
+    <!--<script src="sample.js"></script>-->
+  </head>
+  <body>
+    <h1>Hisense Odin Browser WebView !</h1>
+    <hr/>
+    <div id="msg">[]</div>
+    
+<video width="320" height="240" controls autoplay>
+  <source src="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+</video>
+
+    <p><a href="https://v.qq.com/">腾讯视频</a> ( 中国领先的在线视频媒体平台,海量高清视频在线观看 )</p>
+    <p><a href="https://www.iqiyi.com/">爱奇艺视频</a> ( 海量正版高清视频在线观看 )</p>
+    <p><a href="https://www.youku.com/">优酷视频</a> ( 这世界很酷 )</p>
+    <p><a href="https://www.bilibili.com/">哔哩哔哩</a> ( 哔哩哔哩(゜-゜)つロ干杯~-bilibili )</p>
+    <p><a href="https://www.baidu.com">百度搜索</a> ( 百度一下，你就知道 )</p>
+    <p><a href="http://10.11.108.15/360video/">15 Server</a> ( 15 Server 360 Video )</p>
+    <p><a href="https://www.youtube.com/results?search_query=360+video">Youtube</a> ( Google Youtube 360 Video )</p>
+    
+    <hr/>
+    <!--<p><img src="sample.jpg"/> (local image)</p>-->
+
+  </body>
+  <script type="text/javascript">
+    window.addEventListener(
+        'load',
+        function() {
+            document.body.style.backgroundColor = 'white';
+            window.setTimeout(
+                function() {
+                    document.body.style.backgroundColor = '#ABEBC6';
+                    var msg = document.getElementById("msg");
+                    msg.textContent = '延时3秒后，更新了页面的背影颜色 。';
+                },
+                3000);
+        });
+
+  </script>
+</html>
