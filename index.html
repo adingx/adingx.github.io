@@ -3,6 +3,8 @@
                 <title>Browser Test</title>
         </head>
         <body>
+        
+        <p><b>UserAgent:</b><span id="useragent"></span></p>
 
                 <h1>... WebXR Test ...</h1>
 
@@ -57,4 +59,10 @@
         <p><a href="https://webglsamples.org/aquarium/aquarium.html">aquarium</a> ( 浏览器帧率 )</p>
 
         </body>
+        <script>
+            window.onload = function() {
+                document.getElementById("useragent").innerText = navigator.userAgent; 
+            };
+        </script>
+
 </html>
