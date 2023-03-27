@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <!-- copy from https://nickdesaulniers.github.io/netfix/demo/bufferAll.html -->
+  <!-- reference to https://web.dev/media-mse-basics/  -->
   <head>
     <meta charset="utf-8"/>
     <meta http-equiv="cache-control" content="max-age=0" />
@@ -21,7 +22,7 @@
       var mimeCodec = 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"';
 
       if ('MediaSource' in window && MediaSource.isTypeSupported(mimeCodec)) {
-        var mediaSource = new MediaSource;
+        var mediaSource = new MediaSource();
         console.log(mediaSource.readyState); // closed
         video.src = URL.createObjectURL(mediaSource);
         mediaSource.addEventListener('sourceopen', sourceOpen);
@@ -29,10 +30,28 @@
         console.error('Unsupported MIME type or codec: ', mimeCodec);
       }
 
-      function sourceOpen (_) {
-        console.log(this.readyState); // open
-        var mediaSource = this;
+      function sourceOpen (e) {
+        URL.revokeObjectURL(video.src);
+
+        var mediaSource = e.target;
+        console.log("onsourceopen - " + mediaSource.readyState); // open
         var sourceBuffer = mediaSource.addSourceBuffer(mimeCodec);
+
+        fetch(assetURL)
+          .then(function (response) {
+              return response.arrayBuffer();
+          })
+          .then(function (arrayBuffer) {
+              sourceBuffer.addEventListener('updateend', function(e) {
+                if (!sourceBuffer.updating && mediaSource.readState === 'open') {
+                    mediaSource.endOfStream();
+                    console.log("onupdateend - " + mediaSource.readyState); // ended
+                }
+              });
+              sourceBuffer.appendBuffer(arrayBuffer);
+          });
+
+        /*
         fetchAB(assetURL, function (buf) {
           sourceBuffer.addEventListener('updateend', function (_) {
             mediaSource.endOfStream();
@@ -41,6 +60,7 @@
           });
           sourceBuffer.appendBuffer(buf);
         });
+        */
       };
 
       function fetchAB (url, cb) {
