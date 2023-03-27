@@ -15,7 +15,8 @@
     <script>
       var video = document.querySelector('video');
 
-      var assetURL = 'big_buck_bunny.mp4';
+      //var assetURL = 'big_buck_bunny.mp4';
+      var assetURL = 'https://nickdesaulniers.github.io/netfix/demo/frag_bunny.mp4';
       // Need to be specific for Blink regarding codecs
       // ./mp4info frag_bunny.mp4 | grep Codec
       //var mimeCodec = 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"';
@@ -43,12 +44,15 @@
           })
           .then(function (arrayBuffer) {
               sourceBuffer.addEventListener('updateend', function(e) {
+                console.log("onupdateend - " + mediaSource.readyState); // ended
                 if (!sourceBuffer.updating && mediaSource.readState === 'open') {
                     mediaSource.endOfStream();
-                    console.log("onupdateend - " + mediaSource.readyState); // ended
+                    console.log("onupdateend[endOfStream] - " + mediaSource.readyState); // ended
                 }
               });
+
               sourceBuffer.appendBuffer(arrayBuffer);
+              console.log("sourcebuffer appendbuffer - " + mediaSource.readyState); 
           });
 
         /*
@@ -61,7 +65,7 @@
           sourceBuffer.appendBuffer(buf);
         });
         */
-      };
+      }
 
       function fetchAB (url, cb) {
         console.log(url);
@@ -72,7 +76,7 @@
           cb(xhr.response);
         };
         xhr.send();
-      };
+      }
     </script>
   </body>
 </html>
