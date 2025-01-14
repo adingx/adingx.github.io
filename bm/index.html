@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<TITLE>BM-22W12</TITLE>
+<script type="text/javascript" src="./content.js"></script>
+<script type="text/javascript" src="./index.js"></script>
+
+<link rel="stylesheet" href="./bootstrap.min.css" >
+<!--<link rel="stylesheet" href="./bootstrap.min.css" crossorigin="anonymous">-->
+
+<style type="text/css">
+.fixed {
+  position: fixed;
+  background: #eee;
+  z-index: 10;
+  width: 100%;
+  /* padding-left: 20px; */
+}
+
+.topset {
+  background: #eee;
+}
+
+a {
+	display: inline-block;
+}
+
+/* 
+html { font-size: 14px } 
+html { font-size: 0.875rem } 
+*/
+
+
+/* when the browser window is 600px wide or less */
+@media only screen and (max-width: 600px) {
+	body { padding-top: 70px; }
+	.d-xs-none { display: none; }
+	html { font-size: 0.575rem } 
+}
+
+/* when the browser window is 600px wide or more */
+@media only screen and (min-width: 600px) {
+	body { padding-top: 50px; }
+	html { font-size: 0.8rem } 
+}
+
+
+
+</style>
+
+<body>
+
+	<div id="topping" style="position: absolute; top: 0px; ">&ensp; </div>
+
+	<div class="container-fluid fixed-top topset">
+	<div class="text-center ">
+		<div id="topMenu" class="text-center" ></div>
+	</div>
+	</div>
+
+	<div class="container-fluid">
+
+		<div class="row">
+			<div id="shortcut_area" class="d-xs-none col-md-1 col-sm-2" ></div>
+			<div id="websites_area" class="col-md-11 col-sm-10 " ></div>
+		</div>
+	</div>
+
+	<div class="container-fluid">
+		<div id="weblinks_area"  class="text-center"></div>
+		<div id="bottom_area"  class="text-center">
+			<p>bottom</p>
+		</div>
+	</div>
+
+</body>
+</html>
