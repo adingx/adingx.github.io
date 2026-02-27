@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NaviSwitch TAB Navigation Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .focusable {
+            display: block;
+            padding: 15px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #333;
+            background: #f9f9f9;
+            transition: all 0.2s;
+        }
+        
+        .focusable:focus {
+            outline: none;
+            border-color: #4CAF50;
+            background: #E8F5E9;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+            transform: scale(1.02);
+        }
+        
+        .focusable:hover {
+            border-color: #2196F3;
+            background: #E3F2FD;
+        }
+        
+        input, textarea, button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+        
+        input:focus, textarea:focus, button:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+        }
+        
+        button {
+            background: #2196F3;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+        
+        button:hover {
+            background: #1976D2;
+        }
+        
+        button:active {
+            transform: scale(0.98);
+        }
+        
+        .status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 4px;
+            font-size: 14px;
+            z-index: 1000;
+        }
+        
+        .instructions {
+            background: #FFF3E0;
+            border-left: 4px solid #FF9800;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #F57C00;
+        }
+        
+        .instructions ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="status" id="status">Mode: Loading...</div>
+    
+    <h1>🎯 NaviSwitch TAB Navigation Test</h1>
+    
+    <div class="instructions">
+        <h3>📋 Testing Instructions</h3>
+        <ul>
+            <li><strong>UP/LEFT keys</strong> → Move focus backward (SHIFT+TAB)</li>
+            <li><strong>DOWN/RIGHT keys</strong> → Move focus forward (TAB)</li>
+            <li><strong>ENTER key</strong> → Activate focused element</li>
+            <li><strong>BACK key twice</strong> → Exit PAGE_NAV_MODE</li>
+        </ul>
+    </div>
+    
+    <div class="test-section">
+        <h2>🔗 Focusable Links</h2>
+        <a href="#link1" class="focusable" tabindex="1">Link 1: Navigate with TAB</a>
+        <a href="#link2" class="focusable" tabindex="2">Link 2: Try UP/DOWN keys</a>
+        <a href="#link3" class="focusable" tabindex="3">Link 3: Try LEFT/RIGHT keys</a>
+    </div>
+    
+    <div class="test-section">
+        <h2>📝 Form Elements</h2>
+        <input type="text" placeholder="Input 1: Type your name" tabindex="4">
+        <input type="email" placeholder="Input 2: Enter email" tabindex="5">
+        <textarea placeholder="Textarea: Enter your message" rows="4" tabindex="6"></textarea>
+    </div>
+    
+    <div class="test-section">
+        <h2>🔘 Buttons</h2>
+        <button tabindex="7" onclick="showAlert('Button 1')">Button 1: Press ENTER to activate</button>
+        <button tabindex="8" onclick="showAlert('Button 2')">Button 2: Test focus navigation</button>
+        <button tabindex="9" onclick="showAlert('Button 3')">Button 3: Last focusable element</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>📊 Focus Log</h2>
+        <div id="focusLog" style="background: #f9f9f9; padding: 10px; border-radius: 4px; max-height: 200px; overflow-y: auto; font-family: monospace; font-size: 12px;">
+            Waiting for focus events...
+        </div>
+    </div>
+    
+    <script>
+        // Update mode status
+        function updateStatus() {
+            if (typeof NaviSwitch !== 'undefined') {
+                try {
+                    var mode = NaviSwitch.getCurrentMode();
+                    var statusEl = document.getElementById('status');
+                    statusEl.textContent = 'Mode: ' + (mode === 'page' ? 'PAGE_NAV_MODE ✅' : 'CURSOR_MODE ⚪');
+                    statusEl.style.background = mode === 'page' ? 'rgba(76, 175, 80, 0.9)' : 'rgba(158, 158, 158, 0.9)';
+                } catch (e) {
+                    console.error('Failed to get mode:', e);
+                }
+            }
+        }
+        
+        // Show alert
+        function showAlert(message) {
+            logFocus('Button clicked: ' + message);
+            alert('✅ ' + message + ' activated!');
+        }
+        
+        // Log focus events
+        var focusLogEl = document.getElementById('focusLog');
+        var logCount = 0;
+        
+        function logFocus(message) {
+            logCount++;
+            var timestamp = new Date().toLocaleTimeString();
+            var logEntry = '[' + timestamp + '] #' + logCount + ': ' + message + '\n';
+            
+            if (focusLogEl.textContent === 'Waiting for focus events...') {
+                focusLogEl.textContent = '';
+            }
+            
+            focusLogEl.textContent = logEntry + focusLogEl.textContent;
+        }
+        
+        // Monitor all focus events
+        document.addEventListener('focus', function(e) {
+            var target = e.target;
+            var desc = target.tagName.toLowerCase();
+            if (target.placeholder) desc += ' (' + target.placeholder + ')';
+            if (target.textContent && target.tagName !== 'TEXTAREA') desc += ' (' + target.textContent.substring(0, 20) + ')';
+            logFocus('Focus on: ' + desc);
+        }, true);
+        
+        // Monitor key events
+        document.addEventListener('keydown', function(e) {
+            var keyName = e.key || e.keyCode;
+            logFocus('Key pressed: ' + keyName);
+        }, true);
+        
+        // Initial status update
+        updateStatus();
+        
+        // Update status every 2 seconds
+        setInterval(updateStatus, 2000);
+        
+        // Log when page loads
+        window.addEventListener('load', function() {
+            logFocus('Page loaded, ready for testing');
+            console.log('NaviSwitch Test Page: Ready');
+        });
+    </script>
+</body>
+</html>
