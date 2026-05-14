@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Virtual Cursor Test</title>
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: #0A0A0A;
+      color: #FFFFFF;
+      font-family: system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+    }
+
+    /* ---------- container ---------- */
+    .container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      gap: 48px;
+    }
+
+    /* ---------- top section ---------- */
+    .top-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 600px;
+      height: 260px;
+      background: #1E1E1E;
+      border-radius: 16px;
+      border: 3px solid #2D2D2D;
+    }
+
+    #display-char {
+      font-size: 200px;
+      font-weight: 700;
+      color: #F0F0F2;
+      line-height: 1;
+      user-select: none;
+      letter-spacing: 0;
+    }
+
+    /* ---------- bottom section ---------- */
+    .bottom-section {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .char-row {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    /* ---------- a标签按钮（极简紧凑） ---------- */
+	/*
+    .char-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 3px;
+      background: #1E1E1E;
+      color: #FFFFFF;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      outline: none;
+      transition: background 0.08s, transform 0.08s;
+      user-select: none;
+      -webkit-user-select: none;
+      flex-shrink: 0;
+    }
+	*/
+
+    /* 聚焦状态：白色填充 + 深色文字 + outline 勾勒（不占盒模型空间） */
+	/*
+    .char-btn:focus,
+    .char-btn.focused {
+      background: #F0F0F2;
+      color: #181818;
+      outline: 2px solid #F0F0F2;
+      outline-offset: -2px;
+      transform: scale(1.05);
+      z-index: 1;
+    }
+	*/
+
+    /* 按下状态：稍暗 */
+	/*
+    .char-btn:active,
+    .char-btn.pressed {
+      background: #D8D8D8;
+      color: #181818;
+      transform: scale(0.96);
+    }
+	*/
+
+    /* ---------- 提示信息 ---------- */
+    .hint {
+      font-size: 13px;
+      color: #707070;
+      text-align: center;
+      letter-spacing: 0.5px;
+    }
+
+    /* ---------- 焦点移动方向指示（辅助 TV 导航） ---------- */
+    .top-section.focused-prev,
+    .top-section.focused-next {
+      border-color: #F0F0F2;
+      box-shadow: 0 0 0 1px #F0F0F2;
+    }
+
+    /* 让顶层容器能够接收焦点 */
+    [tabindex]:focus {
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- 上部分：字符展示区 -->
+    <div id="display-area" class="top-section" tabindex="0">
+      <span id="display-char">?</span>
+    </div>
+
+    <!-- 下部分：36个可点击字符 -->
+    <div id="btn-grid" class="bottom-section" role="group" aria-label="字符选择">
+
+      <!-- 第1行: a~i (9个) -->
+      <div class="char-row" data-row="0">
+        <a class="char-btn" data-ch="a" role="button" tabindex="-1">a</a>
+        <a class="char-btn" data-ch="b" role="button" tabindex="-1">b</a>
+        <a class="char-btn" data-ch="c" role="button" tabindex="-1">c</a>
+        <a class="char-btn" data-ch="d" role="button" tabindex="-1">d</a>
+        <a class="char-btn" data-ch="e" role="button" tabindex="-1">e</a>
+        <a class="char-btn" data-ch="f" role="button" tabindex="-1">f</a>
+        <a class="char-btn" data-ch="g" role="button" tabindex="-1">g</a>
+        <a class="char-btn" data-ch="h" role="button" tabindex="-1">h</a>
+        <a class="char-btn" data-ch="i" role="button" tabindex="-1">i</a>
+      </div>
+
+      <!-- 第2行: j~r (9个) -->
+      <div class="char-row" data-row="1">
+        <a class="char-btn" data-ch="j" role="button" tabindex="-1">j</a>
+        <a class="char-btn" data-ch="k" role="button" tabindex="-1">k</a>
+        <a class="char-btn" data-ch="l" role="button" tabindex="-1">l</a>
+        <a class="char-btn" data-ch="m" role="button" tabindex="-1">m</a>
+        <a class="char-btn" data-ch="n" role="button" tabindex="-1">n</a>
+        <a class="char-btn" data-ch="o" role="button" tabindex="-1">o</a>
+        <a class="char-btn" data-ch="p" role="button" tabindex="-1">p</a>
+        <a class="char-btn" data-ch="q" role="button" tabindex="-1">q</a>
+        <a class="char-btn" data-ch="r" role="button" tabindex="-1">r</a>
+      </div>
+
+      <!-- 第3行: s~z,0 (10个) -->
+      <div class="char-row" data-row="2">
+        <a class="char-btn" data-ch="s" role="button" tabindex="-1">s</a>
+        <a class="char-btn" data-ch="t" role="button" tabindex="-1">t</a>
+        <a class="char-btn" data-ch="u" role="button" tabindex="-1">u</a>
+        <a class="char-btn" data-ch="v" role="button" tabindex="-1">v</a>
+        <a class="char-btn" data-ch="w" role="button" tabindex="-1">w</a>
+        <a class="char-btn" data-ch="x" role="button" tabindex="-1">x</a>
+        <a class="char-btn" data-ch="y" role="button" tabindex="-1">y</a>
+        <a class="char-btn" data-ch="z" role="button" tabindex="-1">z</a>
+        <a class="char-btn" data-ch="0" role="button" tabindex="-1">0</a>
+        <a class="char-btn" data-ch="1" role="button" tabindex="-1">1</a>
+      </div>
+
+      <!-- 第4行: 2~9 (8个) -->
+      <div class="char-row" data-row="3">
+        <a class="char-btn" data-ch="2" role="button" tabindex="-1">2</a>
+        <a class="char-btn" data-ch="3" role="button" tabindex="-1">3</a>
+        <a class="char-btn" data-ch="4" role="button" tabindex="-1">4</a>
+        <a class="char-btn" data-ch="5" role="button" tabindex="-1">5</a>
+        <a class="char-btn" data-ch="6" role="button" tabindex="-1">6</a>
+        <a class="char-btn" data-ch="7" role="button" tabindex="-1">7</a>
+        <a class="char-btn" data-ch="8" role="button" tabindex="-1">8</a>
+        <a class="char-btn" data-ch="9" role="button" tabindex="-1">9</a>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      /* ---------- 常量 ---------- */
+      // a-z 是 26 个字母，0-9 是 10 个数字，共 36 个
+      // 布局: [0..8] [9..17] [18..27] [28..35]
+      // 行内元素个数
+      const ROW_COUNTS = [9, 9, 10, 8];
+      const COLS = ROW_COUNTS; // 每行列数
+
+      /* ---------- 状态 ---------- */
+      let currentRow = 0;
+      let currentCol = 0;
+      let buttons = [];        // 所有按钮平铺数组 [index -> element]
+      let rowColMap = [];      // [index -> {row, col}]
+
+      /* ---------- 初始化按钮映射 ---------- */
+      function initButtons() {
+        const rows = document.querySelectorAll('.char-row');
+        rows.forEach((rowEl, rowIndex) => {
+          const btns = rowEl.querySelectorAll('.char-btn');
+          btns.forEach((btn, colIndex) => {
+            const flatIndex = buttons.length;
+            buttons.push(btn);
+            rowColMap.push({ row: rowIndex, col: colIndex });
+          });
+        });
+      }
+
+      /* ---------- 焦点管理 ---------- */
+      function getFlatIndex(row, col) {
+        let idx = 0;
+        for (let r = 0; r < row; r++) idx += ROW_COUNTS[r];
+        return idx + col;
+      }
+
+      function updateFocus(blurPrev) {
+        // 清除所有按钮的 CSS 类
+        buttons.forEach(function (b) {
+          b.classList.remove('focused', 'focused-prev', 'focused-next');
+        });
+
+        const flatIdx = getFlatIndex(currentRow, currentCol);
+        const btn = buttons[flatIdx];
+        if (!btn) return;
+
+        // 添加方向指示类
+        if (blurPrev === 'up')     btn.classList.add('focused-prev');
+        else if (blurPrev === 'down') btn.classList.add('focused-next');
+
+        btn.classList.add('focused');
+
+        // 安全滚动：只滚动容器，不让按钮贴边
+        btn.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' });
+      }
+
+      function clearAllFocus() {
+        buttons.forEach(function (b) {
+          b.classList.remove('focused', 'focused-prev', 'focused-next');
+        });
+      }
+
+      /* ---------- 选中字符 ---------- */
+      function selectChar() {
+        const flatIdx = getFlatIndex(currentRow, currentCol);
+        const btn = buttons[flatIdx];
+        if (!btn) return;
+        const ch = btn.getAttribute('data-ch');
+        document.getElementById('display-char').textContent = ch;
+
+        // 触觉反馈动画（按下效果）
+        btn.classList.add('pressed');
+        setTimeout(function () { btn.classList.remove('pressed'); }, 120);
+      }
+
+      /* ---------- 边界检查 ---------- */
+      function colCount(row) {
+        return ROW_COUNTS[row] || 0;
+      }
+
+      /* ---------- D-pad / 键盘导航 ---------- */
+      function onKeyDown(e) {
+        var handled = true;
+        var blurDir = null;
+
+        switch (e.key) {
+          case 'ArrowUp':
+            if (currentRow === 0) {
+              // 从第一行按钮向上 → 聚焦到顶部展示区
+              clearAllFocus();
+              var area = document.getElementById('display-area');
+              area.classList.add('focused-prev');
+              area.focus();
+            } else {
+              blurDir = 'down';
+              currentRow--;
+              // 列数可能减少，修正列索引
+              if (currentCol >= colCount(currentRow)) currentCol = colCount(currentRow) - 1;
+              updateFocus(blurDir);
+            }
+            break;
+
+          case 'ArrowDown':
+            // 从顶部展示区向下 → 聚焦到第一行第一个按钮
+            if (document.activeElement && document.activeElement.id === 'display-area') {
+              document.getElementById('display-area').classList.remove('focused-prev');
+              currentRow = 0;
+              currentCol = 0;
+              updateFocus(null);
+            } else {
+              blurDir = 'up';
+              if (currentRow < ROW_COUNTS.length - 1) {
+                currentRow++;
+                if (currentCol >= colCount(currentRow)) currentCol = colCount(currentRow) - 1;
+                updateFocus(blurDir);
+              }
+            }
+            break;
+
+          case 'ArrowLeft':
+            if (currentCol > 0) {
+              currentCol--;
+              updateFocus(null);
+            }
+            break;
+
+          case 'ArrowRight':
+            if (currentCol < colCount(currentRow) - 1) {
+              currentCol++;
+              updateFocus(null);
+            }
+            break;
+
+          case 'Enter':
+          case 'OK':
+            selectChar();
+            break;
+
+          case 'Backspace':
+          case 'Escape':
+            // 重置为 ?
+            document.getElementById('display-char').textContent = '?';
+            break;
+
+          default:
+            handled = false;
+        }
+
+        if (handled) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }
+
+      /* ---------- 鼠标/触控点击（安全代理） ---------- */
+      function onButtonClick(e) {
+        var btn = e.target.closest('.char-btn');
+        if (!btn) return;
+        var ch = btn.getAttribute('data-ch');
+        if (!ch) return;
+
+        // 安全更新：XSS 防护
+        var displayEl = document.getElementById('display-char');
+        // data-ch 的值只包含 a-z0-9，由 HTML 本身保证
+        displayEl.textContent = ch;
+
+        // 将点击的按钮设为当前焦点（虚拟光标位置）
+        var idx = buttons.indexOf(btn);
+        if (idx >= 0 && rowColMap[idx]) {
+          currentRow = rowColMap[idx].row;
+          currentCol = rowColMap[idx].col;
+          clearAllFocus();
+          updateFocus(null);
+        }
+      }
+
+      /* ---------- 初始化 ---------- */
+      function init() {
+        initButtons();
+
+        // 键盘监听（document 级别捕获 TV D-pad 事件）
+        document.addEventListener('keydown', onKeyDown, true);
+
+        // 鼠标点击（作为备用，支持普通浏览器测试）
+        document.getElementById('btn-grid').addEventListener('click', onButtonClick, true);
+
+        // 初始焦点设置到第一个按钮
+        currentRow = 0;
+        currentCol = 0;
+        updateFocus(null);
+      }
+
+      // DOM 就绪后初始化
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+
+    })();
+  </script>
+</body>
+</html>
