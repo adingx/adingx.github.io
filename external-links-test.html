@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>自定义 Scheme 拦截测试</title>
+<style>
+    body { font-family: sans-serif; background: #1a1a1a; color: #eee; padding: 24px; }
+    h1 { font-size: 22px; } h2 { font-size: 17px; color: #8ab4f8; margin-top: 28px; }
+    .case { margin: 8px 0; padding: 10px 14px; background: #2a2a2a; border-radius: 8px; }
+    a { color: #7fd4ff; font-size: 16px; }
+    button { font-size: 15px; padding: 8px 16px; margin: 4px 6px 4px 0; border-radius: 6px; border: none; background: #3c5a78; color: #fff; }
+    .expect { color: #9aa0a6; font-size: 13px; margin-left: 10px; }
+    .block { border-left: 4px solid #f28b82; }   /* 预期被拦截 */
+    .allow { border-left: 4px solid #81c995; }   /* 预期放行 */
+    #js-result { color: #fdd663; }
+</style>
+</head>
+<body>
+<h1>自定义 Scheme 拦截测试</h1>
+<p>红框 = 预期被吞掉（无错误页、无崩溃、无新 tab）；绿框 = 预期正常加载。当前页面不应跳走。</p>
+
+<h2>1. 链接点击：自定义 scheme（预期拦截）</h2>
+<div class="case block"><a href="intent://scan/#Intent;scheme=zxing;package=com.google.zxing.client.android;end">intent:// 完整 Intent 格式</a><span class="expect">拦截，无 ERR_UNKNOWN_URL_SCHEME 错误页</span></div>
+<div class="case block"><a href="intent:#Intent;action=android.intent.action.VIEW;package=com.nonexist.app;end">intent:// 无 host</a><span class="expect">拦截</span></div>
+<div class="case block"><a href="mailto:test@example.com?subject=Hello">mailto: 带参数</a><span class="expect">拦截，不唤起邮件应用</span></div>
+<div class="case block"><a href="whatsapp://send?text=hello">whatsapp://send</a><span class="expect">拦截</span></div>
+<div class="case block"><a href="tel:+8613800138000">tel: 电话</a><span class="expect">拦截</span></div>
+<div class="case block"><a href="sms:10086?body=test">sms: 短信</a><span class="expect">拦截</span></div>
+<div class="case block"><a href="market://details?id=com.android.chrome">market:// 应用商店</a><span class="expect">拦截</span></div>
+<div class="case block"><a href="fb://profile/123">fb:// 未知第三方 App</a><span class="expect">拦截</span></div>
+<div class="case block"><a href="completely-unknown-scheme://foo/bar">完全未知 scheme</a><span class="expect">拦截</span></div>
+<div class="case block"><a href="file:///sdcard/payload.html">file:// 本地文件</a><span class="expect">拦截（安全红线）</span></div>
+<div class="case block"><a href="content://com.android.contacts/contacts">content:// 联系人</a><span class="expect">拦截（安全红线）</span></div>
+
+<h2>2. 链接点击：白名单 scheme（预期放行）</h2>
+<div class="case allow"><a href="https://www.google.com">https:// 正常链接</a><span class="expect">正常加载</span></div>
+<div class="case allow"><a href="HTTP://EXAMPLE.COM">大写 HTTP scheme</a><span class="expect">正常加载（修复验证）</span></div>
+<div class="case allow"><a href="javascript:document.getElementById('js-result').textContent='javascript: 已执行 ✓'">javascript: 链接</a><span class="expect">执行并更新下方黄字</span></div>
+<div class="case allow"><a href="data:text/html,<h1 style='color:green'>data: 页面加载成功</h1>">data: URL</a><span class="expect">加载内联页面</span></div>
+<div class="case allow"><a href="about:blank">about:blank</a><span class="expect">打开空白页</span></div>
+<p id="js-result">（javascript: 链接执行结果会显示在这里）</p>
+
+<h2>3. window.open 弹窗路径（预期拦截 —— 修复的漏洞路径）</h2>
+<div class="case block"><button onclick="window.open('intent://scan/#Intent;scheme=zxing;package=com.google.zxing;end')">window.open intent://</button><span class="expect">拦截，不创建新 tab，无错误页</span></div>
+<div class="case block"><button onclick="window.open('mailto:test@example.com')">window.open mailto:</button><span class="expect">拦截，不创建新 tab</span></div>
+<div class="case block"><button onclick="window.open('whatsapp://send?text=hello')">window.open whatsapp://</button><span class="expect">拦截，不创建新 tab</span></div>
+<div class="case allow"><button onclick="window.open('https://example.com')">window.open https://（对照）</button><span class="expect">正常打开新 tab</span></div>
+
+<h2>4. target=&quot;_blank&quot; 链接（同样走弹窗路径）</h2>
+<div class="case block"><a href="intent://scan/#Intent;scheme=zxing;end" target="_blank">target=_blank intent://</a><span class="expect">拦截</span></div>
+<div class="case block"><a href="whatsapp://send?text=hi" target="_blank">target=_blank whatsapp://</a><span class="expect">拦截</span></div>
+
+<h2>5. JS 跳转（location 赋值）</h2>
+<div class="case block"><button onclick="location.href='intent://scan/#Intent;scheme=zxing;end'">location.href = intent://</button><span class="expect">拦截，停留在本页</span></div>
+<div class="case block"><button onclick="location.href='mailto:test@example.com'">location.href = mailto:</button><span class="expect">拦截，停留在本页</span></div>
+
+<h2>6. 地址栏手动输入（手动步骤）</h2>
+<div class="case block">在地址栏输入 <code>intent://scan/#Intent;scheme=zxing;end</code> 并确认<span class="expect">不导航、无错误页、页面保持当前内容</span></div>
+<div class="case block">在地址栏输入 <code>whatsapp://send?text=hello</code> 并确认<span class="expect">同上</span></div>
+</body>
+</html>
